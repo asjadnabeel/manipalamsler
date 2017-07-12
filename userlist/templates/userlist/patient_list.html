@@ -1,0 +1,36 @@
+{% extends "base_gen.html" %}
+
+{% block content %}
+  <div class="jumbotron text-center bg-1">
+    <h1 class="text-center">List of Patients</h1>
+  </div>
+
+    {% if patient_list %}
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10" >
+      <table style="">
+          <tr class="a">
+            <th class="a">Firstname</th>
+            <th class="a">Lastname</th>
+            <th class="a">Age</th>
+            <th class="a">Details</th>
+          </tr>
+        {% for a in patient_list %}
+          <tr class="a">
+            <td class="a">{{a.first_name }}</td>
+            <td class="a">{{a.last_name}}</td>
+            <td class="a">{{a.age}}</td>
+            <td class="a"> <a href="{{ a.get_absolute_url }}" >Click</a></td>
+          </tr>
+        {% endfor %}
+      </table>
+     </div>
+    <div class="col-sm-1"></div>
+    {% else %}
+      <div class="col-sm-1"></div>
+      <div class="col-sm-10" >
+        <p>There are no patients present.</p>
+      </div>
+      <div class="col-sm-1">
+    {% endif %}
+{% endblock %}

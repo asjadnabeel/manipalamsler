@@ -1,0 +1,9 @@
+{% extends "base_gen.html" %}
+
+{% block content %}
+<div class="jumbotron text-center">
+  <h1>Logged Out</h1>
+</div>
+
+<a href="{% url 'login'%}?next={{request.path}}">Click here to login again.</a>
+{% endblock %}

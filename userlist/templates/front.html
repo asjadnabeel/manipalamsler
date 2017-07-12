@@ -1,0 +1,31 @@
+{% extends "base_gen.html" %}
+
+{% block content %}
+<div class="jumbotron text-center" style = "background-color: #1abc9c; /* Green */color: #ffffff";>
+  <h1>Manipal E-Amsler</h1>
+  <p>Welcome to the Doctors Web Portal of Manipal E-Amsler</p>
+</div>
+
+<div class="container bg-3 ">
+  <div class="row">
+    <div class="col-sm-4">
+        <img id="im2" src="http://www.swfleye.com/images/eye.png" alt="EYE CARE"></img>
+
+    </div>
+    <div class="col-sm-4">
+      <h3>Usage Details</h3>
+      <p>A lot of users are using our application</p>
+      <p><strong>Patients:</strong> {{ num_patients }}</p>
+      <p><strong>Doctors:</strong> {{ num_doctors }}</p>
+	</div>
+    <div class="col-sm-4">
+      <h3>Try us Out</h3>
+	  <p> Its really useful. Try it out</p>
+      <p>We have a lot of features perfect for general eye care</p>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

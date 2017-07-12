@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Amsler Grid </title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+
+.style1 {
+		position:absolute;
+		float:left;
+		top: 140px;
+		left:100px;
+		margin:10px;
+        padding: 10px;
+		border: 2px solid black;
+		cursor:move;
+    }
+.style2 {
+		float:left;
+		position:relative;
+        padding: 2px;
+		cursor:move;
+    }
+.header1 {
+		height:90px;
+		padding:5px;
+
+    }
+.container-fluid {
+    padding-right: 0px;
+
+    }
+
+.navbar {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        border: 0;
+        border-radius: 0;
+        margin-bottom: 0;
+        font-size: 15px;
+        letter-spacing: 5px;
+  }
+.navbar-nav  li a:hover {
+        color: #1abc9c !important;
+  }
+.bg-1 {
+        background-color: #1abc9c; /* Green */
+        color: #ffffff;
+  }
+.bg-2 {
+        background-color: #474e5d; /* Dark Blue */
+        color: #ffffff;
+  }
+.bg-3 {
+        background-color: #ffffff; /* White */
+        color: #555555;
+  }
+.bg-4 {
+        background-color: #2f2f2f; /* Black Gray */
+        color: #fff;
+  }
+
+</style>
+
+<script type="text/javascript">
+        function startDrag(e) {
+            // determine event object
+            if (!e) {
+                var e = window.event;
+            }
+
+            // IE uses srcElement, others use target
+            var targ = e.target ? e.target : e.srcElement;
+
+            if (targ.className != 'style1') {return};
+            // calculate event X, Y coordinates
+                offsetX = e.clientX;
+                offsetY = e.clientY;
+
+            // assign default values for top and left properties
+            if(!targ.style.left) { targ.style.left='0px'};
+            if (!targ.style.top) { targ.style.top='0px'};
+
+            // calculate integer values for top and left
+            // properties
+            coordX = parseInt(targ.style.left);
+            coordY = parseInt(targ.style.top);
+            drag = true;
+
+            // move div element
+                document.onmousemove=dragDiv;
+			return false;
+        }
+        function dragDiv(e) {
+            if (!drag) {return};
+            if (!e) { var e= window.event};
+            var targ=e.target?e.target:e.srcElement;
+            // move div element
+            targ.style.left=(coordX+e.clientX-offsetX)%600+'px';
+            targ.style.top= coordY+e.clientY-offsetY+'px';
+            return false;
+        }
+        function stopDrag() {
+            drag=false;
+        }
+        window.onload = function() {
+            document.onmousedown = startDrag;
+            document.onmouseup = stopDrag;
+        }
+
+
+</script>
+</head>
+
+<body style=" align: center;  background: rgba(51, 51, 51, 0.1);">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Manipal E-Amsler</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'index' %}">HOME</a></li>
+                <li><a href="{% url 'about' %}" >ABOUT</a></li>
+        {% if user.is_authenticated %}
+                <li><a href="{% url 'patient' %}">PATIENT</a></li>
+                <li><a href="{% url 'addpatient' %}">ADD</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'logout'%}">LOGOUT</a></li>
+                <li><a href=""> User: {{ user.get_full_name }}</a></li>
+            </ul>
+        {% else %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'login'%}?next={{request.path}}">LOGIN</a></li>
+                </ul>
+        {% endif %}
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+
+        <div class = "style2 col-sm-8">
+            {% load static %}
+            <img id="im1" src="/media/{{ photo }}" alt= "Not available"  onerror="this.onerror=null;this.src='/media/{{ fundus }}';" height="500px">
+        </div>
+
+        <img id="canva" src = "/media/{{ grid1 }}" alt = "Not available" width="420px" height="420px" style="background: #fff; opacity:0.5;" class = "style1"></img>
+
+        <div class = "menubar col-sm-4 bg-3">
+            <h3>Patient Details</h3>
+            <TABLE style="border-collapse: collapse; width: 100%;">
+                <tr>
+                    <td>Patient Name: </td> <td>{{ first_name }} {{last_name}}</td>
+                </tr>
+                <tr>
+                    <td>Amsler Score </td>  <td style="align-content: center;">{{amsler_score}}</td>
+                </tr>
+                <tr>
+                    <td>Status </td><td>{{status}}</td>
+                </tr>
+                <tr>
+                    <td>Date Of Upload</td><td>{{date}}</td>
+                </tr>
+            </TABLE>
+            <h3>Doctor Actions</h3>
+            <form role="form" action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table>
+                    {{ form }}
+                </table>
+                <button type="submit">Submit</button>
+            </form>
+            <p>Click Button to alter transparency:</p>
+            <select  id="cars" onchange="myfunction()">
+                <option value="0.1">0.1</option>
+                <option value="0.25">0.25</option>
+                <option value="0.5" selected = "selected">0.5</option>
+                <option value="0.75">0.75</option>
+            </select>
+            <button onclick="myFunction()">Try it</button>
+        </div>
+	</div>
+
+
+
+
+<script>
+function myFunction() {
+    var e = document.getElementById("cars");
+    var strUser = e.options[e.selectedIndex].value;
+    document.getElementById("canva").style.opacity = strUser;
+}
+</script>
+
+</body>
+</html>

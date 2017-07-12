@@ -1,0 +1,29 @@
+{% extends "base_gen.html" %}
+{% block title %}
+  <title>Pateint-Detail</title>
+{% endblock %}
+
+{% block content %}
+
+  <div class="jumbotron text-center bg-1">
+    <h1 class="text-center"> {{ patient.first_name }} {{patient.last_name}}</h1>
+  </div>
+  <div style="margin-left:20px">
+    <p><strong>Address:</strong> {{ patient.address }}</p>
+    <p><strong>Age:</strong> {{ patient.age }}</p>
+    <p><strong>Email:</strong> {{ patient.email }}</p>
+  </div>
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Amsler Grid Results</h4>
+
+    {% for res in patient.amslergrid_set.all %}
+    <hr>
+    <p class="{% if res.status == 'v' %}text-success{% elif res.status == 'u' %}text-danger{% else %}text-warning{% endif %}">{{ res.get_status_display }}</p>
+    <p><strong>Amsler Grid Score:</strong> {{res.amsler_score}}</p>
+    <p class="text-muted"><strong>Date:</strong> {{res.verify_date}}</p>
+    <p>
+        <a href="{{res.get_absolute_url}}">Check</a>
+    </p>
+    {% endfor %}
+  </div>
+{% endblock %}
